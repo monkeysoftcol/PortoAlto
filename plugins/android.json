@@ -7,15 +7,18 @@
     "files": {}
   },
   "installed_plugins": {
+    "cordova-plugin-inappbrowser": {
+      "PACKAGE_NAME": "co.com.portoalto"
+    },
+    "cordova-plugin-splashscreen": {
+      "PACKAGE_NAME": "co.com.portoalto"
+    },
     "cordova-plugin-whitelist": {
-      "PACKAGE_NAME": "com.portoalto.org"
+      "PACKAGE_NAME": "co.com.portoalto"
     },
     "phonegap-plugin-barcodescanner": {
       "ANDROID_SUPPORT_V4_VERSION": "27.+",
-      "PACKAGE_NAME": "com.portoalto.org"
-    },
-    "cordova-plugin-inappbrowser": {
-      "PACKAGE_NAME": "com.portoalto.org"
+      "PACKAGE_NAME": "co.com.portoalto"
     }
   },
   "dependent_plugins": {}
