@@ -1,0 +1,462 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Grupo Amigos</title>
+        <meta HTTP-EQUIV="Content-Type" content="text/html; charset=iso-8859-1" />
+        <script type="text/javascript" src="cordova.js"></script>
+        <meta name="viewport" content="width=device-width,user-scalable=no" />
+		<link href="jquery.mobile-1.0.min.css" rel="stylesheet">
+		<script src="jquery.js"></script>
+		<script src="jquery.mobile-1.0.min.js"></script>
+		<script type="text/javascript">
+			var ruta = "http://192.168.1.66";
+			//TOMAR VARIABLES GET
+			query=window.location.search.substring(1);
+			//alert(window.location.search.substring(1));
+			q=query.split("&");
+			vars=[];
+			for(i=0;i<q.length;i++){
+				x=q[i].split("=");
+				k=x[0];
+				v=x[1];
+				vars[k]=v;
+				//alert(k + ": " + vars[k]);
+			}
+			//*******************
+			//Segun nivel, pasar a pagina
+			if(vars['nivel'] == 2 || vars['nivel'] == 1){
+				location.href='#pantaMaestro';
+			}
+			if(vars['nivel'] == 0){
+				location.href='#pantaEstablecimiento';
+				mis_promociones();
+			}
+			//***************************
+			function regEstablecimiento(){
+				var xmlhttp;
+				var razonsocial3 = document.getElementById("razonsocial3").value;
+				var marcaest = document.getElementById("marcaest").value;
+				var repre_legal = document.getElementById("repre_legal").value;
+				var nit = document.getElementById("nit").value;
+				var departamento2 = document.getElementById("departamento2").value;
+				var ciudad2 = document.getElementById("ciudad2").value;
+				var nick_estab = document.getElementById("nick_estab").value;
+				var pass_estab = document.getElementById("pass_estab").value;
+				var dir_principal = document.getElementById("dir_principal").value;
+				var categoria1 = document.getElementById("categoria1").value;
+				var usrcrm = vars['usuario'];
+				if(razonsocial3 == "" || marcaest == "" || repre_legal == "" || nit == "" || departamento2 == "" || ciudad2 == "" || nick_estab == "" || pass_estab == "" || dir_principal == "" || categoria1 == ""){
+					alert("Ningun Campo Puede Estar Vacio");
+					return;
+				}
+				if (window.XMLHttpRequest)
+				{// code for IE7+, Firefox, Chrome, Opera, Safari
+					xmlhttp=new XMLHttpRequest();
+				}
+				else
+				{// code for IE6, IE5
+					xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+				}	
+				xmlhttp.onreadystatechange=function()
+				{					
+					if (xmlhttp.readyState==4 && xmlhttp.status==200)
+					{
+						if(xmlhttp.responseText == 'Guardado'){
+							alert('Guardado Correctamente');
+							razonsocial3 = ""; marcaest = "";
+							repre_legal = ""; nit = "";
+							departamento2 = ""; ciudad2 = "";
+							nick_estab = ""; pass_estab = "";
+							dir_principal = ""; categoria1 = "";
+							//Segun nivel, pasar a pagina
+							if(vars['nivel'] == 2 || vars['nivel'] == 1){
+								location.href='#pantaMaestro';
+							}
+							if(vars['nivel'] == 0){
+								location.href='#pantaEstablecimiento';
+								mis_promociones();
+							}
+							//***************************
+						}else{
+							document.getElementById("res_registro").innerHTML = xmlhttp.responseText;
+						}
+					}
+				}
+				xmlhttp.open("GET",ruta + "/GrupoAmigos/db.php?opc=7&razonsocial=" + razonsocial3 + "&marca=" + marcaest + "&representante=" + repre_legal + "&nit=" + nit + "&departamento=" + departamento2 + "&ciudad=" + ciudad2 + "&nick=" + nick_estab + "&pass=" + pass_estab + "&dir_principal=" + dir_principal + "&categoria=" + categoria1 + "&usrcrm=" + usrcrm,true);				
+				xmlhttp.send();
+			}
+			function llenar_departamentos(nDep){
+				var xmlhttp;
+				//document.getElementById("cEstablecimiento").innerHTML="";
+				if (window.XMLHttpRequest)
+				{// code for IE7+, Firefox, Chrome, Opera, Safari
+					xmlhttp=new XMLHttpRequest();
+				}
+				else
+				{// code for IE6, IE5
+					xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+				}	
+				xmlhttp.onreadystatechange=function()
+				{					
+					if (xmlhttp.readyState==4 && xmlhttp.status==200)
+					{
+						var str = xmlhttp.responseText;
+						var res = str.split("-");
+						for(var i = 0; i < res.length; i++){
+							if(res[i] != ""){
+								document.getElementById(nDep).options[i + 1] = new Option(res[i], res[i]);
+							}
+						}
+						//document.getElementById("ciu").innerHTML=xmlhttp.responseText;		 
+					}
+				}
+				xmlhttp.open("GET",ruta + "/GrupoAmigos/db.php?opc=1",true);				
+				xmlhttp.send();
+			}
+			function llenar_ciudades(nCiudad, nDep, dvRespuesta){
+				var xmlhttp;
+				var departamento = document.getElementById(nDep).value;
+				//document.getElementById("cEstablecimiento").innerHTML="";
+				if(departamento == ""){
+					return;
+				}
+				if (window.XMLHttpRequest)
+				{// code for IE7+, Firefox, Chrome, Opera, Safari
+					xmlhttp=new XMLHttpRequest();
+				}
+				else
+				{// code for IE6, IE5
+					xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+				}
+				xmlhttp.onreadystatechange=function()
+				{					
+					if (xmlhttp.readyState==4 && xmlhttp.status==200)
+					{
+						document.getElementById(dvRespuesta).innerHTML=xmlhttp.responseText;
+					}
+				}
+				xmlhttp.open("GET",ruta + "/GrupoAmigos/db.php?opc=4&departamento=" + departamento + "&nom_combo=" + nCiudad,true);				
+				xmlhttp.send();
+			}
+			function cnEstablecimientos(nCiudad, nDep){
+				var xmlhttp;
+				var departamento = document.getElementById(nDep).value;
+				var ciudad = document.getElementById(nCiudad).value;
+				if(departamento == "" || ciudad == ""){
+					document.getElementById("cEstablecimiento").innerHTML="";
+					return;
+				}
+				if (window.XMLHttpRequest)
+				{// code for IE7+, Firefox, Chrome, Opera, Safari
+					xmlhttp=new XMLHttpRequest();
+				}
+				else
+				{// code for IE6, IE5
+					xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+				}	
+				xmlhttp.onreadystatechange=function()
+				{					
+					if (xmlhttp.readyState==4 && xmlhttp.status==200)
+					{
+						document.getElementById("cEstablecimiento").innerHTML=xmlhttp.responseText;		 
+					}
+				}
+				xmlhttp.open("GET",ruta + "/GrupoAmigos/db.php?opc=8&ciudad=" + ciudad + "&departamento=" + departamento,true);				
+				xmlhttp.send();
+			}
+			function mis_promociones(){
+				var xmlhttp;
+				if (window.XMLHttpRequest)
+				{// code for IE7+, Firefox, Chrome, Opera, Safari
+					xmlhttp=new XMLHttpRequest();
+				}
+				else
+				{// code for IE6, IE5
+					xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+				}	
+				xmlhttp.onreadystatechange=function()
+				{					
+					if (xmlhttp.readyState==4 && xmlhttp.status==200)
+					{
+						document.getElementById("mPromociones").innerHTML=xmlhttp.responseText;
+					}
+				}
+				xmlhttp.open("GET",ruta + "/GrupoAmigos/db.php?opc=6&usuario=" + vars['usuario'],true);				
+				xmlhttp.send();
+			}
+		</script>
+    </head>    
+    <body>
+		<div data-role="page" data-theme="b" id="pantaMaestro" data-add-back-btn="true">
+
+			<div data-role="header" data-theme="e">
+				<h1>Grupo Amigos</h1>
+			</div>
+			
+			<div data-role="content">
+				<center>
+					<a href="#pgRegistroEst" data-role="button" data-theme="c">Agregar Establecimiento(s)</a>
+					<a href="#pgConsultarEst" data-role="button" data-theme="c">Cons. Establecimiento(s)</a><!-- 5 --><br>
+					<a onclick="" data-role="button" data-theme="c">Agregar Vendedor</a><!-- 6 -->
+					<a onclick="" data-role="button" data-theme="c">Consultar Vendedor</a><!-- 7 -->
+				</center>
+			</div>
+			
+			<div data-role="footer" data-theme="b"> 
+				<h4>@ Copyright 2017</h4>  
+			</div>
+
+		</div>
+		<!-- Registro Establecimiento -->
+		<div data-role="page" data-theme="b" id="pgRegistroEst" data-add-back-btn="true">
+
+			<div data-role="header" data-theme="e">
+				<h1>Registro de Establecimiento</h1>
+			</div>
+			
+			<div data-role="content">
+				<center>
+					<table WIDTH="100%">
+						<tr>
+							<td align="right"><p>Razon Social</p></td>
+							<td align="center"><input type="text" name="razonsocial3" id="razonsocial3"></td>
+						</tr>
+						<tr>
+							<td align="right"><p>Marca</p></td>
+							<td align="center"><input type="text" name="marcaest" id="marcaest"></td>
+						</tr>	
+						<tr>
+							<td align="right"><p>Representante Legal</p></td>
+							<td align="center"><input type="text" name="repre_legal" id="repre_legal"></td>
+						</tr>
+						<tr>
+							<td align="right"><p>NIT</p></td>
+							<td align="center"><input type="text" name="nit" id="nit"></td>
+						</tr>
+						<tr>
+							<td align="right"><p>Departamento</p></td>
+							<td align="center">
+								<select id="departamento2" name="departamento2" data-native-menu="false" data-theme="e" onchange="llenar_ciudades('ciudad2', 'departamento2', 'alaciudad')">
+									<optgroup label="Departamento">
+										<option value="" selected="selected">Seleccione.....</option>
+										<script type="text/javascript">llenar_departamentos("departamento2");</script>										
+									</optgroup>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td align="right"><p>Ciudad</p></td>
+							<td align="center">
+								<div id="alaciudad">
+									<select id="ciudad2" name="ciudad2" data-native-menu="false" data-theme="e">
+										<!--<optgroup label="Ciudad">
+											<option value="" selected="selected">Seleccione.....</option>
+										</optgroup> -->
+									</select>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td align="right"><p>Nick (Usuario)</p></td>
+							<td align="center"><input type="text" name="nick_estab" id="nick_estab"></td>
+						</tr>
+						<tr>
+							<td align="right"><p>Contrase&ntilde;a</p></td>
+							<td align="center"><input type="password" name="pass_estab" id="pass_estab"></td>
+						</tr>
+						<tr>
+							<td align="right"><p>Direccion Principal</p></td>
+							<td align="center"><input type="text" name="dir_principal" id="dir_principal"></td>
+						</tr>
+						<tr>
+							<td align="right"><p>Categoria</p></td>
+							<td align="center">
+								<select id="categoria1" name="categoria1" data-native-menu="false" data-theme="e">
+									<optgroup label="Categoria">
+										<option value="" selected="selected">Seleccione....</option>
+										<option value="Animales y Agricultura">Animales y Agricultura</option>
+										<option value="Auto Partes">Auto Partes</option>
+										<option value="Bares y Discotecas">Bares y Discotecas</option>
+										<option value="Belleza y Estetica">Belleza y Estetica</option>
+										<option value="Diversion y Aventura">Diversion y Aventura</option>
+										<option value="Elementos Deportivos">Elementos Deportivos</option>
+										<option value="Gastronomia">Gastronomia</option>
+										<option value="Productos Hogar">Productos Hogar</option>
+										<option value="Ropa y Accesorios">Ropa y Accesorios</option>
+										<option value="Salud y Bienestar">Salud y Bienestar</option>
+										<option value="Tecnologia">Tecnologia</option>
+										<option value="Otros">Otros</option>
+									</optgroup>
+								</select>
+							</td>
+						</tr>
+						
+						<tr>
+							<td align="center" colspan="2"><br><br><a onclick="regEstablecimiento()" data-role="button" data-theme="c">Registrar Establecimiento</a></td>
+						</tr>
+						<tr>
+							<td align="center" colspan="2"><div id="res_registro"></div></td>
+						</tr>
+					</table>					
+				</center>
+			</div>
+			
+			<div data-role="footer" data-theme="b"> 
+				<h4>@ Copyright 2017</h4>  
+			</div>
+
+		</div>
+		<!-- FIN REGISTRO ESTABLECIMIENTO -->
+		<!-- CONSULTAR ESTABLECIMIENTOS -->
+		<div data-role="page" data-theme="b" id="pgConsultarEst" data-add-back-btn="true">
+
+			<div data-role="header" data-theme="e">
+				<h1>Consultar Establecimiento</h1>
+			</div>
+			
+			<div data-role="content">
+				<center>
+					<table WIDTH="100%">
+						<tr>
+							<td align="right"><p>Departamento</p></td>
+							<td align="center">
+								<select id="departamento5" name="departamento5" data-native-menu="false" data-theme="e" onchange="llenar_ciudades('ciudad5', 'departamento5', 'alaciudad5')">
+									<optgroup label="Departamento">
+										<option value="" selected="selected">Seleccione.....</option>
+										<script type="text/javascript">llenar_departamentos("departamento5");</script>										
+									</optgroup>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td align="right"><p>Ciudad</p></td>
+							<td align="center">
+								<div id="alaciudad5">
+									<select id="ciudad5" name="ciudad5" data-native-menu="false" data-theme="e">
+										<!--<optgroup label="Ciudad">
+											<option value="" selected="selected">Seleccione.....</option>
+										</optgroup> -->
+									</select>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td align="center" colspan="2"><br><br><a onclick="cnEstablecimientos('ciudad5', 'departamento5')" data-role="button" data-theme="c">Filtrar</a></td>
+						</tr>
+					</table>
+					<div id="cEstablecimiento"></div><br>
+				</center>
+			</div>
+			
+			<div data-role="footer" data-theme="b"> 
+				<h4>@ Copyright 2017</h4>  
+			</div>
+		</div>
+		<!-- FIN CONSULTAR ESTABLECIMIENTOS -->
+		<!-- Registro Vendedores -->
+		<div data-role="page" data-theme="b" id="pgRegistroVendedor" data-add-back-btn="true">
+
+			<div data-role="header" data-theme="e">
+				<h1>Registro de Vendedores</h1>
+			</div>
+			
+			<div data-role="content">
+				<center>
+					<table WIDTH="100%">
+						<tr>
+							<td align="right"><p>Nombre Completo</p></td>
+							<td align="center"><input type="text" name="razonsocial4" id="razonsocial3"></td>
+						</tr>
+						<tr>
+							<td align="right"><p>Numero de Cedula</p></td>
+							<td align="center"><input type="text" name="nocedula4" id="nocedula4"></td>
+						</tr>
+						<tr>
+							<td align="right"><p>Departamento</p></td>
+							<td align="center">
+								<select id="departamento4" name="departamento4" data-native-menu="false" data-theme="e" onchange="llenar_ciudades('ciudad4', 'departamento4', 'alaciudad4')">
+									<optgroup label="Departamento">
+										<option value="" selected="selected">Seleccione.....</option>
+										<script type="text/javascript">llenar_departamentos("departamento4");</script>										
+									</optgroup>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td align="right"><p>Ciudad</p></td>
+							<td align="center">
+								<div id="alaciudad4">
+									<select id="ciudad4" name="ciudad4" data-native-menu="false" data-theme="e">
+										<!--<optgroup label="Ciudad">
+											<option value="" selected="selected">Seleccione.....</option>
+										</optgroup> -->
+									</select>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td align="right"><p>Nick (Usuario)</p></td>
+							<td align="center"><input type="text" name="nick_estab" id="nick_estab"></td>
+						</tr>
+						<tr>
+							<td align="right"><p>Contrase&ntilde;a</p></td>
+							<td align="center"><input type="password" name="pass_estab" id="pass_estab"></td>
+						</tr>
+						<tr>
+							<td align="right"><p>Direccion Residencia</p></td>
+							<td align="center"><input type="text" name="dir_principal" id="dir_principal"></td>
+						</tr>					
+						<tr>
+							<td align="center" colspan="2"><br><br><a onclick="regVendedor()" data-role="button" data-theme="c">Registrar Vendedor</a></td>
+						</tr>
+						<tr>
+							<td align="center" colspan="2"><div id="res_regVendedor"></div></td>
+						</tr>
+					</table>					
+				</center>
+			</div>
+			
+			<div data-role="footer" data-theme="b"> 
+				<h4>@ Copyright 2017</h4>  
+			</div>
+
+		</div>
+		<!-- FIN REGISTRO VENDEDORES -->
+		<!-- ESTABLECIMIENTO -->
+		<div data-role="page" data-theme="b" id="pantaEstablecimiento" data-add-back-btn="true">
+
+			<div data-role="header" data-theme="e">
+				<h1>Establecimiento</h1>
+			</div>
+			
+			<div data-role="content">
+				<center>
+					<a href="#misPromociones" data-role="button" data-theme="c">Mis Promociones</a>	
+				</center>
+			</div>
+			
+			<div data-role="footer" data-theme="b"> 
+				<h4>@ Copyright 2017</h4>  
+			</div>
+		</div>
+		<div data-role="page" data-theme="b" id="misPromociones" data-add-back-btn="true">
+
+			<div data-role="header" data-theme="e">
+				<h1>Establecimiento</h1>
+			</div>
+			
+			<div data-role="content">
+				<center>
+					<div id="mPromociones"></div><br>
+					<a onclick="mis_promociones()" data-role="button" data-theme="c">Actualizar</a>	
+				</center>
+			</div>
+			
+			<div data-role="footer" data-theme="b"> 
+				<h4>@ Copyright 2017</h4>  
+			</div>
+		</div>
+		<!-- FIN ESTABLECIMIENTO -->
+    </body>
+</html>
