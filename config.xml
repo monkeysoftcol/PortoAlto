@@ -11,12 +11,7 @@
     <plugin name="cordova-plugin-whitelist" spec="1" />
     <!--<icon src="res/icon.png" />-->
 
-	<plugin spec="https://github.com/Telerik-Verified-Plugins/BarcodeScanner.git" source="git">
-		<param name="CAMERA_USAGE_DESCRIPTION" value="Es necesario para escanear códigos QR." />
-	</plugin>
-	<plugin name="cordova-plugin-camera" spec="^2.4.1" source="npm">
-		<variable name="CAMERA_USAGE_DESCRIPTION" value="Es necesario para tomar fotos" />
-	</plugin>
+	<plugin name="cordova-plugin-camera" spec="~4.0.3" />
 	<plugin name="phonegap-plugin-barcodescanner" />
     
     <!--<platform name="android">
