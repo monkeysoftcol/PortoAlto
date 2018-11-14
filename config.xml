@@ -11,8 +11,9 @@
     <plugin name="cordova-plugin-whitelist" spec="1" />
     <!--<icon src="res/icon.png" />-->
 
-	<plugin name="cordova-plugin-camera" spec="~4.0.3" />
-	<plugin name="phonegap-plugin-barcodescanner" />
+    <plugin name="Camera" value="org.apache.cordova.CameraLauncher" />
+    <plugin name="Camera" value="CDVCamera" />
+    <plugin name="phonegap-plugin-barcodescanner" />
     
     <!--<platform name="android">
         <icon src="res/icon/android/icon-36-ldpi.png" density="ldpi" />
