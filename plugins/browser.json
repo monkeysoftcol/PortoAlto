@@ -1,0 +1,24 @@
+{
+  "prepare_queue": {
+    "installed": [],
+    "uninstalled": []
+  },
+  "config_munge": {
+    "files": {}
+  },
+  "installed_plugins": {
+    "cordova-plugin-inappbrowser": {
+      "PACKAGE_NAME": "co.com.portoalto"
+    },
+    "cordova-plugin-splashscreen": {
+      "PACKAGE_NAME": "co.com.portoalto"
+    },
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "co.com.portoalto"
+    },
+    "phonegap-plugin-barcodescanner": {
+      "PACKAGE_NAME": "co.com.portoalto"
+    }
+  },
+  "dependent_plugins": {}
+}
