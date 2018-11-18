@@ -47,8 +47,10 @@
 				xmlhttp.send();
 			}
 			function scan(){
+				alert("escanner.....");
 				console.log("clicked");
 				cordova.plugins.barcodeScanner.scan(function(result){
+					alert(JSON.stringify(result));
 				//success callback
 					traer_datos_reserva(result['text']);
 				},function(error){

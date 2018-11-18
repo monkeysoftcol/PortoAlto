@@ -9,6 +9,37 @@
     </author>
     <content src="index.html" />
     <plugin name="cordova-plugin-whitelist" spec="1" />
+
+    <!--<icon src="res/icon.png" />-->
+
+    <plugin name="cordova-plugin-camera" spec="^4.0.3" />
+    <plugin name="phonegap-plugin-barcodescanner" spec="^8.0.0">
+        <variable name="ANDROID_SUPPORT_V4_VERSION" value="27.+" />
+    </plugin>
+    
+    <!--<platform name="android">
+        <icon src="res/icon/android/icon-36-ldpi.png" density="ldpi" />
+        <icon src="res/icon/android/icon-48-mdpi.png" density="mdpi" />
+        <icon src="res/icon/android/icon-72-hdpi.png" density="hdpi" />
+        <icon src="res/icon/android/icon-96-xhdpi.png" density="xhdpi" />
+     </platform>
+     <platform name="android">
+        <splash density="land-hdpi" src="res/splash.jpg" />
+        <splash density="land-ldpi" src="res/splash.jpg" />
+        <splash density="land-mdpi" src="res/splash.jpg" />
+        <splash density="land-xhdpi" src="res/splash.jpg" />
+        <splash density="port-hdpi" src="res/splash.jpg" />
+        <splash density="port-ldpi" src="res/splash.jpg" />
+        <splash density="port-mdpi" src="res/splash.jpg" />
+        <splash density="port-xhdpi" src="res/splash.jpg" />
+    </platform>
+    <platform name="ios">
+        <icon src="res/icon/ios/icon-57.png" width="57" height="57"/>
+        <icon src="res/icon/ios/icon-57-2x.png" width="114" height="114"/>
+        <icon src="res/icon/ios/icon-72.png" width="72" height="72"/>
+        <icon src="res/icon/ios/icon-72-2x" width="144" height="144"/>
+     </platform>-->
+
     <platform name="android">
         <icon qualifier="ldpi" src="res/icon/android/drawable-ldpi-icon.png" />
         <icon qualifier="mdpi" src="res/icon/android/drawable-mdpi-icon.png" />
@@ -27,6 +58,12 @@
         <splash qualifier="port-xhdpi" src="res/screen/android/drawable-port-xhdpi-screen.png" />
         <splash qualifier="port-xxhdpi" src="res/screen/android/drawable-port-xxhdpi-screen.png" />
         <splash qualifier="port-xxxhdpi" src="res/screen/android/drawable-port-xxxhdpi-screen.png" />
+        
+        <custom-config-file parent="/*" target="AndroidManifest.xml">
+            <uses-permission android:name="android.permission.CAMERA" />
+            <uses-feature android:name="android.hardware.camera" />
+            <uses-feature android:name="android.hardware.camera.autofocus" />
+       </custom-config-file>
     </platform>
     <platform name="ios">
         <icon height="57" platform="ios" src="res/icon/ios/icon.png" width="57" />
@@ -56,6 +93,12 @@
         <splash height="960" platform="ios" src="res/screen/ios/Default@2x~iphone.png" width="640" />
         <splash height="480" platform="ios" src="res/screen/ios/Default~iphone.png" width="320" />
     </platform>
+
+
+    <feature name="BarcodeScanner">
+        <param name="android-package" value="com.phonegap.plugins.barcodescanner.BarcodeScanner" />
+    </feature>
+
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -70,9 +113,8 @@
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
     </platform>
-    <plugin name="phonegap-plugin-barcodescanner" spec="^8.0.0">
-        <variable name="ANDROID_SUPPORT_V4_VERSION" value="27.+" />
-    </plugin>
+    
+    
     <plugin name="cordova-plugin-inappbrowser" spec="^3.0.0" />
     <engine name="ios" spec="^4.5.5" />
     <engine name="android" spec="^7.0.0" />
